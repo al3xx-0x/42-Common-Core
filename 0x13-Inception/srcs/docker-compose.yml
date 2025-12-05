@@ -1,0 +1,78 @@
+services:
+  mariadb:
+    image: mariadb:sbouabid
+    container_name: mariadb
+    build: requirements/mariadb/.
+    env_file:
+      - .env
+    volumes:
+      - mariadb:/var/lib/mysql
+    networks:
+      - my-network
+    restart: always
+
+  nginx:
+    image: nginx:sbouabid
+    container_name: nginx
+    build: requirements/nginx/.
+    env_file:
+      - .env
+    ports:
+      - "443:443"
+    depends_on:
+      - wordpress
+    volumes:
+      - wordpress:/var/www/wordpress
+    networks:
+      - my-network
+    restart: always
+    secrets:
+      - db_root_pass
+      - db_user_pass
+
+
+  wordpress:
+    image: wordpress:sbouabid
+    container_name: wordpress
+    build: requirements/wordpress/.
+    env_file:
+      - .env
+    depends_on:
+      - mariadb
+    volumes:
+      - wordpress:/var/www/wordpress
+    networks:
+      - my-network
+    restart: always
+    secrets:
+      - wp_admin_pass
+      - wp_user_pass
+
+volumes:
+  mariadb:  # Name of the volume
+    driver: local  # Uses local storage (default in Docker)
+    driver_opts:
+      device: /home/sbouabid/data/mariadb  # Stores data in this folder
+      o: bind  # Binds the folder to the volume
+      type: none  # No special filesystem type
+
+  wordpress:  # Name of the volume
+    driver: local  # Uses local storage (default in Docker)
+    driver_opts:
+      device: /home/sbouabid/data/wordpress  # Stores data in this folder
+      o: bind  # Binds the folder to the volume
+      type: none  # No special filesystem type
+
+secrets:
+  db_user_pass:
+    file: ../secrets/db_password.txt
+  db_root_pass:
+    file: ../secrets/db_root_password.txt
+  wp_admin_pass:
+    file: ../secrets/wordpress_root_password.txt
+  wp_user_pass:
+    file: ../secrets/wordpress_password.txt
+
+networks:
+  my-network:
+    driver: bridge

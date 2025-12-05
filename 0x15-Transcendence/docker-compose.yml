@@ -1,0 +1,52 @@
+services:
+  vault:
+    build: ./vault
+    ports:
+      - "8200:8200"
+    environment:
+      - VAULT_ADDR=http://0.0.0.0:8200
+    cap_add:
+      - IPC_LOCK
+    networks:
+    - app-network
+    healthcheck:
+      test: ["CMD", "vault", "status"]
+      interval: 3s
+      timeout: 2s
+      retries: 10
+
+  backend:
+    build: ./backend
+    container_name: backend
+    networks:
+      - app-network
+    depends_on:
+      vault:
+        condition: service_healthy
+    environment:
+      - VAULT_ADDR=http://vault:8200
+      - VAULT_TOKEN=myroottoken
+    restart: on-failure
+
+  frontend:
+    build: ./front-end
+    container_name: frontend
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    ports:
+      - "443:443"
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

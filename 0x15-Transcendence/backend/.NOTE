@@ -1,0 +1,4 @@
+for tournaments logic i will add another column to games table , (tournament_id, round, ..other needs),
+and the tournaments table will have only id and created date and the start date. no more
+
+#WHEN EVERYONE ON THE TOURNAMENT WAS LEAVES :) EDGE CASE BUT THINKING ABOUT THIS CASE FOR LATER.
