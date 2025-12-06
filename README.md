@@ -127,14 +127,7 @@
 | Networking | 2 | ⭐⭐⭐ to ⭐⭐⭐⭐⭐ |
 | Web Development | 1 | ⭐⭐⭐⭐⭐ |
 
-**Total**: 15 projects | **Lines of Code**: ~30,000+ | **Duration**: ~1-2 years
-
----
-
-## 🚀 Next Steps
-
-**Specializations**: DevOps, Cloud infrastructure, Game engines, Full-stack development, Cybersecurity, Embedded systems, Data science  
-**Opportunities**: Open-source contributions, Portfolio projects, Hackathons, Certifications, Internships
+**Total**: 15 projects | **Lines of Code**: ~300,000+ | **Duration**: ~2-3 years
 
 ---
 
